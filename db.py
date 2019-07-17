@@ -8,7 +8,7 @@ class SearchData(Base):
     id = Column(Integer, primary_key=True)
     song_short=Column(String)
     song_link=Column(String)
-engine=create_engine("postgres://mzkgcqwmoaywpx:9e89df52e90c30a6674e5c53edfcbf313a8b4cc95e5f8f0f07a829d780ba080d@ec2-54-235-67-106.compute-1.amazonaws.com:5432/dfk12mf6e1p2g7")
+engine=create_engine("DATABASE_URL")
 
 def loadSession():
     Session = sessionmaker(bind=engine)
