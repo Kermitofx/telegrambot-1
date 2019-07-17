@@ -1,0 +1,5 @@
+cherrypy
+psycopg2
+sqlalchemy
+bs4
+requests
