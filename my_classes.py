@@ -33,7 +33,6 @@ class Update:
             self.sendApprove()
 
     def sendFile(self):
-        #link = Searchquery.objects.filter(song_short__contains=self.mes_text).order_by('-id')[0].song_link
         session=loadSession()
 
         link = session.query(SearchData).filter(SearchData.song_link.ilike('%' + self.mes_text+ '%')).order_by(
@@ -92,7 +91,7 @@ class Callback(Update):
     def main(self):
         if self.button == 'agreed':
             soup = self.site_request(SITE_SEARCH_URL + self.search_text)
-            if soup:
+            if soup is not None:    # если есть ответ от сервера сайта
                 playlist = soup.find("div", "playlist--hover")
                 if playlist:
                     self.makeResults(playlist)
@@ -114,24 +113,30 @@ class Callback(Update):
             for c in x.find_all("span", class_="text-muted"):
                 curdict['info'].append(c.get_text())
             self.reslist.append(curdict)
+
         for y in self.reslist:  # получаем полные ссылки на песни
             result = self.site_request(SITE_URL + y['link'])
 
             div = result.find("div", "playlist__actions")
-            resultRef = div.find("a", "no-ajaxy")['href']
+
+            resultRef = div.find("a", class_="no-ajaxy yaBrowser")
+            if resultRef is None: #если на целевой странице нет ссылки на песню
+                y['filelink']='empty'
+                continue
+            resultRef = resultRef['href']
             y['filelink'] = SITE_URL + str(resultRef)
-            #s = Searchquery(song_short=y['link'], song_link=y['filelink'])
             session=loadSession()
             new_searchData=SearchData(song_short=y['link'],song_link=y['filelink'])
             session.add(new_searchData)
             session.commit()
         self.res_text = ""
         for a in self.reslist:
-            a['mod_link'] = re.sub(r'^.*?\/.*?(\/.*?)\/.*$', r'\1', a['link'])
-            self.res_text += '<b>' + a['author'] + '</b>' + '\n'
-            self.res_text += a['song'] + '\n'
-            self.res_text += a['info'][0] + '  ' + '<i>' + a['info'][1] + '</i>' + '\n'
-            self.res_text += '<i>Download:</i>' + a['mod_link'] + '\n\n'
+            if a['filelink']!='empty': # не обрабатываем песню без ссылки
+                a['mod_link'] = re.sub(r'^.*?\/.*?(\/.*?)\/.*$', r'\1', a['link'])
+                self.res_text += '<b>' + a['author'] + '</b>' + '\n'
+                self.res_text += a['song'] + '\n'
+                self.res_text += a['info'][0] + '  ' + '<i>' + a['info'][1] + '</i>' + '\n'
+                self.res_text += '<i>Download:</i>' + a['mod_link'] + '\n\n'
 
     def sendResults(self):
         payload = {'chat_id': self.chat_id}
