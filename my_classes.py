@@ -43,13 +43,13 @@ class Update:
     def sendTgrmRequest(self,url,payload):
         try:
             res=requests.post(url,json=payload)
-            print (res.url)
-            print(payload)
+            #print (res.url)
+            #print(payload)
         except (requests.exceptions.ConnectionError ,requests.exceptions.ConnectTimeout) as e:
             self.sendReqNotOk()
         else:
             resp=json.loads(res.text)
-            print(resp)
+            #print(resp)
             if (resp.get('error_code') == 400) and (resp.get('description') == 'Bad Request: failed to get HTTP URL content'):
                 self.sendNotFound()
 

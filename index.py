@@ -17,7 +17,6 @@ class Halo(object):
             callback=Callback(MsgUpdate)
             callback.main()
 port=os.environ['PORT']
-print(port)
 cherrypy.config.update({
     'server.socket_host': WEBHOOK_LISTEN,
     'server.socket_port':int(port)
