@@ -3,8 +3,8 @@ from bs4 import BeautifulSoup
 from db import SearchData,loadSession
 from sqlalchemy import desc
 
-BOTURL_MES = 'https://api.telegram.org/bot731908012:AAFlI81ckIEu0GcZJv6Bo1gLkj2NY1aNlxQ/sendMessage'
-BOTURL_AUDIO = 'https://api.telegram.org/bot731908012:AAFlI81ckIEu0GcZJv6Bo1gLkj2NY1aNlxQ/sendAudio'
+BOTURL_MES = 'https://api.telegram.org/bot928105941:AAHXNyGre-Wi6tRExNFCw5VsKjuJApByXjI/sendMessage'
+BOTURL_AUDIO = 'https://api.telegram.org/bot928105941:AAHXNyGre-Wi6tRExNFCw5VsKjuJApByXjI/sendAudio'
 GREETINGS = """Hello,I am musicbot. I will help you search and download some music. Just enter your search request.
 Здравствуйте,я - музыкальный бот. Я помогу Вам найти и скачать музыку. Просто введите свой поисковый запрос."""
 UNKNOWN="Sorry.This command doesn't exist"
